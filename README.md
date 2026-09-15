@@ -47,7 +47,7 @@ O programa lê os arquivos presentes em `/data/raw` e grava os resultados em `da
 ## Justificativa da arquitetura
 ![Graph](graph_image.png)
 
-Utilizei a função Send para paralelizar as execuções e unificar tudo no final
-Precisei utilizar um subgrafo para manter associado o nome do arquivo e o conteudo do mesmo
-Separei as responsabilidades e cada agente. Poderia ter feito tudo em um só, mas como precisava manter custo baixo e ter mais segurança dos resultados, optei por essa arquitetura.
+Para garantir uma execução rápida, utilizei a função Send para paralelizar as execuções e unificar tudo no final.<br>
+Precisei utilizar um subgrafo para manter associado o nome do arquivo e o conteudo do mesmo.<br>
+Separei as responsabilidades e cada agente. Poderia ter feito tudo em um só, mas como precisava manter custo baixo e ter mais segurança dos resultados, optei por essa arquitetura.<br>
 Utilizei também um middleware customizado para assegurar que as saidas estruturadas sejam utilizadas.
