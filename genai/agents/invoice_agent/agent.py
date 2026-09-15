@@ -1,7 +1,5 @@
-import base64
-import pymupdf
-from pathlib import Path
 from dotenv import load_dotenv
+from pathlib import Path
 
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -11,8 +9,8 @@ from langgraph.graph.state import CompiledStateGraph
 from langgraph.graph import END
 from langgraph.types import Command
 
-from genai.agents.contract_agent.schemas import ContractAgentSchema
-from genai.agents.contract_agent.prompt import prompt
+from genai.agents.invoice_agent.schemas import InvoiceAgentSchema
+from genai.agents.invoice_agent.prompt import prompt
 from genai.middlewares.structured_response_retry import StructuredResponseRetryMiddleware
 
 load_dotenv()
@@ -31,14 +29,14 @@ model: ChatOpenAI = ChatOpenAI(
 )
 
 agent: CompiledStateGraph = create_agent(
-    name="contract_agent",
+    name="invoice_agent",
     model=model,
-    middleware=[StructuredResponseRetryMiddleware(schema=ContractAgentSchema, max_retries=3)],
-    response_format=ContractAgentSchema   
+    middleware=[StructuredResponseRetryMiddleware(schema=InvoiceAgentSchema, max_retries=3)],
+    response_format=InvoiceAgentSchema   
 )
 
 
-async def contract_agent(state: dict) -> Command:
+async def invoice_agent(state: dict) -> Command:
     encoded_content: str = state["encoded_content"]
     
     messages: list[AnyMessage] = [
@@ -59,14 +57,15 @@ async def contract_agent(state: dict) -> Command:
     update: dict
     try:
         model_response: dict = await agent.ainvoke(input={"messages": messages})
-        structured_response: ContractAgentSchema = model_response["structured_response"]
+        structured_response: InvoiceAgentSchema = model_response["structured_response"]
         output: dict = structured_response.model_dump()
         output["filename"] = Path(state["current_filepath"]).name
+        
         update = {
-            "contract_outputs": [output]
+            "invoice_outputs": [output]
         }
     except Exception as e:
-        error_msg: str = f"Error occurred in file {state['current_filepath']} while invoking contract_agent: {e}"
+        error_msg: str = f"Error occurred in file {state['current_filepath']} while invoking invoice_agent: {e}"
         update={"errors": [error_msg]}
         
     return Command(

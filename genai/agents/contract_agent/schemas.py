@@ -1,9 +1,10 @@
 from pydantic import BaseModel, Field
 
 
-class Contrato(BaseModel):
-    contratante: str = Field(description="")
-    contratado: str = Field(description="")
-    objeto_contrato: str = Field(description="")
-    data_vigencia: str = Field(description="")
-    valor_mensal: float = Field(description="")
+class ContractAgentSchema(BaseModel):
+    contratante: str = Field(description="Tomador do serviço")
+    contratado: str = Field(description="Fornecedor do serviço")
+    objeto_contrato: str = Field(description="Descrição do serviço contratado")
+    data_inicio: str = Field(description="Data de início do contrato. Formato: DD/MM/YYYY")
+    data_final: str = Field(description="Data de término do contrato. Formato: DD/MM/YYYY")
+    valor_mensal: float = Field(description="Valor mensal do contrato")

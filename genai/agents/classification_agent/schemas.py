@@ -3,4 +3,4 @@ from pydantic import BaseModel, Field
 
 
 class ClassificationAgentSchema(BaseModel):
-    classification: Literal["contract", "report", "tax_receipt", "other"] = Field(description="Tipo de arquivo recebido")
+    classification: Literal["contract", "report", "invoice", "other"] = Field(description="Tipo de arquivo recebido")
